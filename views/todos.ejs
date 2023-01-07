@@ -1,5 +1,15 @@
 
-    <div
+    <h5>
+      <%= title %><span
+        class="bg-gray-200 text-black px-1 pz-1 rounded font-sm mb-1 ml-2"
+      >
+        <%= data.length %></span
+      >
+    </h5>
+    <ul class="list-none">
+      <% for(var i=0; i< data.length; i++) {%>
+      <li class="Todo-Item">
+        <div
       class="flex items-center w-fit my-2 px-2 py-1 rounded hover:bg-purple-50"
     >
       <input id="value<%=data[i].id%>" type="checkbox" onclick="updateTodo('<%=data[i].id %>' )" <%= data[i].completed ? "checked" :"" %> class="w-4
