@@ -81,4 +81,36 @@ describe("Todo test suite", () => {
       completed: false,
       _csrf: csrfToken,
     });
-    
+    await agent.post("/todos").send({
+      title: "Buy ps3",
+      dueDate: new Date().toISOString(),
+      completed: false,
+      _csrf: csrfToken,
+    });
+    await agent.post("/todos").send({
+      title: "Buy milk",
+      dueDate: new Date().toISOString(),
+      completed: false,
+      _csrf: csrfToken,
+    });
+
+    const groupedTodosResponse = await agent
+      .get("/")
+      .set("Accept", "application/json");
+    const parsedGroupedResponse = JSON.parse(groupedTodosResponse.text);
+    const dueTodayCount = parsedGroupedResponse.duetodaytodos.length;
+    const latestTodo = parsedGroupedResponse.duetodaytodos[dueTodayCount - 1];
+
+    res = await agent.get("/");
+    csrfToken = extractCsrfToken(res);
+    const deleteResponse = await agent.delete(`/todos/${latestTodo.id}`).send({
+      _csrf: csrfToken,
+    });
+
+    const deletestatus = JSON.parse(deleteResponse.text);
+
+    deletestatus
+      ? expect(deletestatus).toBe(true)
+      : expect(deletestatus).toBe(false);
+  });
+});
